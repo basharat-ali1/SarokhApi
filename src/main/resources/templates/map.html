@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Google Maps Example</title>
+    <script src='http://code.jquery.com/jquery.min.js' type='text/javascript'></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCjt_DROGYyzEY0BTDt0vrPcZIMLuBUGiw" type="text/javascript"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .marginbottom50 {
+            margin-bottom: 50px;
+        }
+
+        input.field2 {
+            padding: 0 10px;
+        }
+
+        .bg-dark {
+            background: #FFF !important;
+            color: #FFF !important;
+            border-bottom: #f6921d solid 2px;
+        }
+
+        .footer {
+            background: #282a2b !important;
+            color: #FFF;
+            padding: 12px;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            padding-left: 40px;
+        }
+
+        .footer p {
+            margin-bottom: 0;
+        }
+    </style>
+
+</head>
+<body style="background-color: #e4e5e6;">
+
+    <script th:inline="javascript" >
+        var infowindow = null;
+        $(document).ready(function () { initialize(); });
+
+        function initialize() {
+            var latitude = [[${lat}]];
+            var longitude = [[${long}]];
+
+            var centerMap = new google.maps.LatLng(latitude, longitude);
+
+            var myOptions = {
+                zoom: 6,
+                center: centerMap,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+
+            var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+            setMarkers(map, sites);
+            infowindow = new google.maps.InfoWindow({
+                content: "loading..."
+            });
+
+        }
+
+        var sites = [
+            ['Mount Evans', 39.58108, -105.63535, 4, 'This is Mount Evans.'],
+            ['Irving Homestead', 40.315939, -105.440630, 2, 'This is the Irving Homestead.'],
+            ['Badlands National Park', 43.785890, -101.90175, 1, 'This is Badlands National Park'],
+            ['Flatirons in the Spring', 39.99948, -105.28370, 3, 'These are the Flatirons in the spring.']
+        ];
+
+        function setMarkers(map, markers) {
+
+            for (var i = 0; i < markers.length; i++) {
+                var sites = markers[i];
+                var siteLatLng = new google.maps.LatLng(sites[1], sites[2]);
+                var marker = new google.maps.Marker({
+                    position: siteLatLng,
+                    map: map,
+                    title: sites[0],
+                    zIndex: sites[3],
+                    html: sites[4]
+                });
+
+                var contentString = "Some content";
+
+                google.maps.event.addListener(marker, "click", function () {
+                    infowindow.setContent(this.html);
+                    infowindow.open(map, this);
+                });
+            }
+        }
+    </script>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav pl-5">
+                <img src="sarokh-logo.png" alt="">
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top:100px">
+        <div class="row">
+                <div id="map_canvas" style="width: 1200px; height: 700px;"></div>
+        </div>
+    </div>
+
+    <div class=" text-left footer" style="margin-bottom:0">
+        <p>Copyright reserved</p>
+    </div>
+
+</body>
+</html>

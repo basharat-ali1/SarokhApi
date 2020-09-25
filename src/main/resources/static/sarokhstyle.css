@@ -1,0 +1,27 @@
+.marginbottom50 {
+    margin-bottom: 50px;
+}
+
+input.field2 {
+    padding: 0 10px;
+}
+
+.bg-dark {
+    background: #FFF !important;
+    color: #FFF !important;
+    border-bottom: #f6921d solid 2px;
+}
+
+.footer {
+    background: #282a2b !important;
+    color: #FFF;
+    padding: 12px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding-left: 40px;
+}
+
+.footer p {
+    margin-bottom: 0;
+}

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Receiver Location</title>
+    <script src='http://code.jquery.com/jquery.min.js' type='text/javascript'></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjt_DROGYyzEY0BTDt0vrPcZIMLuBUGiw&libraries=places&callback=initAutocomplete"
+            async defer></script>
+
+    <style>
+
+        #map {
+            margin: 20px;
+            height: 400px;
+            border: #f6921d;
+            border-width: 15px;
+        }
+
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #description {
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+        }
+
+        .heading-label-bold{
+            color: #f6921d;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        .heading-label{
+            color: #f6921d;
+            font-size: 17px;
+        }
+
+        .table-style{
+            width: 90%;
+            horiz-align: center;
+            margin: 20px 50px 20px 50px;
+            background: #FFFFFF;
+        }
+
+        td{
+            padding-left: 10px;
+        }
+
+        #infowindow-content .title {
+            font-weight: bold;
+        }
+
+        #infowindow-content {
+            display: none;
+        }
+
+        #map #infowindow-content {
+            display: inline;
+        }
+
+        .search-card {
+            margin: 10px 10px 0 0;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            font-family: Roboto;
+        }
+
+        #search-container {
+            padding-bottom: 12px;
+            margin-right: 12px;
+        }
+
+        .search-controls {
+            display: inline-block;
+            padding: 5px 11px;
+        }
+
+        .search-controls label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        #date-input{
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 400px;
+        }
+
+        #search-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 400px;
+        }
+
+        #search-input:focus {
+            border-color: #4d90fe;
+        }
+
+        #title {
+            color: #fff;
+            background-color: #4d90fe;
+            font-size: 25px;
+            font-weight: 500;
+            padding: 6px 12px;
+        }
+        #target {
+            width: 345px;
+        }
+
+        input.field2 {
+            padding: 0 10px;
+        }
+
+        .bg-dark {
+            background: #FFF !important;
+            color: #FFF !important;
+            border-bottom: #f6921d solid 2px;
+        }
+
+        .footer {
+            background: #282a2b !important;
+            color: #FFF;
+            padding: 12px;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            padding-left: 40px;
+        }
+
+        .footer p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body style="background-color: #e4e5e6;">
+
+<script>
+
+    function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 21.3891, lng: 39.8579},
+            zoom: 10,
+            mapTypeId: 'roadmap'
+        });
+
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('search-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            }
+
+            // Clear out the old markers.
+            markers.forEach(function(marker) {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            // For each place, get the icon, name and location.
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function(place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+                var icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    icon: icon,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
+
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+    }
+
+    function submitForm(option){
+        if (option == 'Sarokh Point'){
+            document.getElementById("option").value = option;
+        }
+        document.form1.submit();
+    }
+
+</script>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav pl-5">
+            <img src="sarokh-logo.png" alt="">
+        </ul>
+    </div>
+</nav>
+
+<table class="table-style" >
+    <tr>
+        <td style="width: 15%;"><span class="heading-label-bold">Tracking Number:</span></td>
+        <td style="width: 25%;"><span th:text="${order.orderId}" class="heading-label"></span></td>
+        <td style="width: 15%;"><span class="heading-label-bold">Shipper Name:</span></td>
+        <td style="width: 45%;"><span th:text="${shipperName}" class="heading-label"></span></td>
+    </tr>
+    <tr>
+        <td colspan="2"><span class="heading-label-bold">Receiver Info:</span></td>
+        <td><span class="heading-label-bold">Delivery Status:</span></td>
+        <td><span th:text="${orderItem.deliveryStatus}" class="heading-label"></span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Reciever Name:</span></td>
+        <td><span th:text="${orderItem.receiverName}"></span></td>
+        <td colspan="2" ><span class="heading-label-bold">Delivery Location on Map:</span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Contact No:</span></td>
+        <td><span th:text="${orderItem.contact}"></span></td>
+        <td colspan="2" rowspan="10"><div id="map"></div></td>
+    </tr>
+    <tr>
+        <td colspan="2"><span class="heading-label-bold">Shipment Detail:</span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Shipment Title:</span></td>
+        <td><span th:text="${orderItem.shipmentTitle}"></span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Shipment Content:</span></td>
+        <td><span th:text="${orderItem.shipmentContent}"></span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Payment Type:</span></td>
+        <td><span th:text="${orderItem.paymentType}"></span></td>
+    </tr>
+    <tr>
+        <td colspan="2"><span class="heading-label-bold">Delivery Detail:</span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Delivery City:</span></td>
+        <td><span th:text="${order.shipToCity}"></span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Delivery Type:</span></td>
+        <td><span th:text="${order.deliveryLocation}"></span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Delivery Address:</span></td>
+        <td><span th:text="${order.deliveryLocationDetail}"></span></td>
+    </tr>
+    <tr>
+        <td><span style="font-weight: bold">Delivery Date:</span></td>
+        <td><span th:text="${orderItem.deliveryDate}"></span></td>
+    </tr>
+
+</table>
+
+
+
+<div style="text-align:center">
+    <form th:action="@{/receiveorder}" th:object="${receiveform}" name = "form1" method="post">
+        <input type="hidden" th:field="*{trackingNumber}" id="trackingnumber"/>
+        <input type="hidden" th:field="*{deliveryLocation}" id="option"/>
+        <span th:if="${showbuttons}">
+            <input class="btn btn-primary float-center" style="margin-left: 20px;" type="button" onclick="submitForm('Last Mile')" value="Last Mile" />
+            <input class="btn btn-primary float-center" style="margin-left: 20px;" type="button" onclick="submitForm('Sarokh Point')" value="Sarokh Point" />
+        </span>
+    </form>
+</div>
+
+<div class=" text-left footer" style="margin-bottom:0">
+    <p>Copyright reserved</p>
+</div>
+
+</body>
+</html>

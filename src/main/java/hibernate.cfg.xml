@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:mysql://localhost:3306/Sarokh_db</property>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <mapping class="net.sarokh.api.model.entity.BankAccount"/>
+        <mapping class="net.sarokh.api.model.entity.City"/>
+        <mapping class="net.sarokh.api.model.entity.CityZone"/>
+        <mapping class="net.sarokh.api.model.entity.Country"/>
+        <mapping class="net.sarokh.api.model.entity.DeliveryCharges"/>
+        <mapping class="net.sarokh.api.model.entity.Dealer"/>
+        <mapping class="net.sarokh.api.model.entity.DealerPoint"/>
+        <mapping class="net.sarokh.api.model.entity.DispatchTrip"/>
+        <mapping class="net.sarokh.api.model.entity.DispatchTripDetail"/>
+        <mapping class="net.sarokh.api.model.entity.Driver"/>
+        <mapping class="net.sarokh.api.model.entity.DriverExpense"/>
+        <mapping class="net.sarokh.api.model.entity.Ledger"/>
+        <mapping class="net.sarokh.api.model.entity.OrderPickupType"/>
+        <mapping class="net.sarokh.api.model.entity.PaymentTransaction"/>
+        <mapping class="net.sarokh.api.model.entity.Permission"/>
+        <mapping class="net.sarokh.api.model.entity.Receiver"/>
+        <mapping class="net.sarokh.api.model.entity.Role"/>
+        <mapping class="net.sarokh.api.model.entity.SarokhTask"/>
+        <mapping class="net.sarokh.api.model.entity.SarokhTaskConfirmation"/>
+        <mapping class="net.sarokh.api.model.entity.SarokhWarehouse"/>
+        <mapping class="net.sarokh.api.model.entity.Shipment"/>
+        <mapping class="net.sarokh.api.model.entity.ShipmentIssueReport"/>
+        <mapping class="net.sarokh.api.model.entity.ShipmentOrder"/>
+        <mapping class="net.sarokh.api.model.entity.ShipmentOrderItem"/>
+        <mapping class="net.sarokh.api.model.entity.Shipper"/>
+        <mapping class="net.sarokh.api.model.entity.ShipperAddress"/>
+        <mapping class="net.sarokh.api.model.entity.ShipperCrew"/>
+        <mapping class="net.sarokh.api.model.entity.ShipperWarehouse"/>
+        <mapping class="net.sarokh.api.model.entity.ShipperTariff"/>
+        <mapping class="net.sarokh.api.model.entity.ShippingInfo"/>
+        <mapping class="net.sarokh.api.model.entity.User"/>
+        <mapping class="net.sarokh.api.model.entity.UserRole"/>
+        <mapping class="net.sarokh.api.model.entity.Vehicle"/>
+        <mapping class="net.sarokh.api.model.entity.VehicleMaintenance"/>
+        <mapping class="net.sarokh.api.model.entity.Vendor"/>
+        <mapping class="net.sarokh.api.model.entity.Wallet"/>
+        <mapping class="net.sarokh.api.model.entity.WarehouseManager"/>
+        <mapping class="net.sarokh.api.model.entity.WarehouseStorage"/>
+
+    </session-factory>
+</hibernate-configuration>

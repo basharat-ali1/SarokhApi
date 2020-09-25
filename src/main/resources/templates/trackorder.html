@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Track Order</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/sarokhstyle.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .marginbottom50 {
+            margin-bottom: 50px;
+        }
+
+        input.field2 {
+            padding: 0 10px;
+        }
+
+        .bg-dark {
+            background: #FFF !important;
+            color: #FFF !important;
+            border-bottom: #f6921d solid 2px;
+        }
+
+        .footer {
+            background: #282a2b !important;
+            color: #FFF;
+            padding: 12px;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            padding-left: 40px;
+        }
+
+        .footer p {
+            margin-bottom: 0;
+        }
+    </style>
+
+
+</head>
+
+<body style="background-color: #e4e5e6;">
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav pl-5">
+            <img src="sarokh-logo.png" alt="">
+        </ul>
+    </div>
+</nav>
+
+<div class="container" style="margin-top:100px">
+    <div class="row">
+        <div class="col-sm-8 mx-auto ">
+            <div th:if="${error}">
+                <div class="alert alert-danger"><p th:text="${error}"></p></div>
+            </div>
+            <div th:if="${message}">
+                <div class="alert alert-success"><p th:text="${message}"></p></div>
+            </div>
+            <div class="card marginbottom50 margin50">
+                <div class="card-header">
+                    Track Order
+                </div>
+                <div class="card-body">
+                    <form class="form-group" th:action="@{/searchorder}" th:object="${trackingform}" method="post" >
+                        <div class="form-group">
+                            <label for="trackingnumber">Tracking Number:</label>
+                            <input type="text" th:field="*{trackingNumber}" id="trackingnumber"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="otp" style="margin-left: 30px;">OTP:</label>
+                            <input type="text" th:field="*{otp}" id="otp" style="margin-left: 60px;"/>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="btn btn-primary float-right" type="submit" value="Track Order" />
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" text-left footer" style="margin-bottom:0">
+    <p>Copyright reserved</p>
+</div>
+
+</body>
+
+
+</html>
